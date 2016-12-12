@@ -48,7 +48,12 @@ class ViewController: UIViewController {
     }
     
     @IBAction func changeFreq(_ sender: UISlider) {
-        //oscillator.frequency = Double (sender.value * 880)
+        audioSource.setDetuningOsc2(value: sender.value)
+    }
+    @IBAction func setCutoff(_ sender: UISlider) {
+        audioSource.setCutoff(value: sender.value)   }
+    @IBAction func setResonance(_ sender: UISlider) {
+        audioSource.setResonance(value: sender.value)
     }
 }
 

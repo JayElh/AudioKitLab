@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		85027C111DFF37AF00CF65C6 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85027C101DFF37AF00CF65C6 /* AudioToolbox.framework */; };
 		850AE99F1DD845F800620CCC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 850AE99E1DD845F800620CCC /* AppDelegate.swift */; };
 		850AE9A11DD845F800620CCC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 850AE9A01DD845F800620CCC /* ViewController.swift */; };
 		850AE9A41DD845F800620CCC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 850AE9A21DD845F800620CCC /* Main.storyboard */; };
@@ -52,6 +53,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		85027C0E1DFF37AF00CF65C6 /* Audio.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Audio.entitlements; sourceTree = "<group>"; };
+		85027C101DFF37AF00CF65C6 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		850AE99B1DD845F800620CCC /* Audio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Audio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		850AE99E1DD845F800620CCC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		850AE9A01DD845F800620CCC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -76,6 +79,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				850AE9D01DD8462500620CCC /* AudioKit.framework in Frameworks */,
+				85027C111DFF37AF00CF65C6 /* AudioToolbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,6 +100,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		85027C0F1DFF37AF00CF65C6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				85027C101DFF37AF00CF65C6 /* AudioToolbox.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		850AE9921DD845F800620CCC = {
 			isa = PBXGroup;
 			children = (
@@ -104,6 +116,7 @@
 				850AE9B51DD845F900620CCC /* AudioTests */,
 				850AE9C01DD845F900620CCC /* AudioUITests */,
 				850AE99C1DD845F800620CCC /* Products */,
+				85027C0F1DFF37AF00CF65C6 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -120,6 +133,7 @@
 		850AE99D1DD845F800620CCC /* Audio */ = {
 			isa = PBXGroup;
 			children = (
+				85027C0E1DFF37AF00CF65C6 /* Audio.entitlements */,
 				850AE99E1DD845F800620CCC /* AppDelegate.swift */,
 				850AE9A01DD845F800620CCC /* ViewController.swift */,
 				850AE9A21DD845F800620CCC /* Main.storyboard */,
@@ -219,7 +233,16 @@
 				TargetAttributes = {
 					850AE99A1DD845F800620CCC = {
 						CreatedOnToolsVersion = 8.1;
+						DevelopmentTeam = Y57F7LD284;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.InterAppAudio = {
+								enabled = 1;
+							};
+						};
 					};
 					850AE9B11DD845F900620CCC = {
 						CreatedOnToolsVersion = 8.1;
@@ -440,11 +463,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Audio/Audio.entitlements;
+				DEVELOPMENT_TEAM = Y57F7LD284;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)Kit-iOS",
 				);
 				INFOPLIST_FILE = Audio/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Johan.Audio;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -456,11 +482,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Audio/Audio.entitlements;
+				DEVELOPMENT_TEAM = Y57F7LD284;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)Kit-iOS",
 				);
 				INFOPLIST_FILE = Audio/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Johan.Audio;
 				PRODUCT_NAME = "$(TARGET_NAME)";
