@@ -7,12 +7,19 @@
 //
 
 import UIKit
+import AudioKit
+
+
 
 class ViewController: UIViewController {
 
+    var isPlaying = false
+    let audioSource = AudioSource()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+
+        isPlaying = true
     }
 
     override func didReceiveMemoryWarning() {
@@ -20,6 +27,28 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    @IBAction func button(_ sender: UIButton) {
+        audioSource.play()
+    }
+    
+    @IBAction func setAttack(_ sender: UISlider) {
+        audioSource.setAttack(value: sender.value)
+    }
 
+    @IBAction func setDecay(_ sender: UISlider) {
+        audioSource.setDecay(value: sender.value)
+    }
+    
+    @IBAction func setSustain(_ sender: UISlider) {
+        audioSource.setSustain(value: sender.value)
+    }
+    
+    @IBAction func setRelease(_ sender: UISlider) {
+        audioSource.setRelease(value: sender.value)
+    }
+    
+    @IBAction func changeFreq(_ sender: UISlider) {
+        //oscillator.frequency = Double (sender.value * 880)
+    }
 }
 
