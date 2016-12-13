@@ -9,7 +9,7 @@
 import Foundation
 import AudioKit
 
-class AudioSource {
+class AudioSource: AKMIDIListener {
     
     let midi = AKMIDI()
     
@@ -27,7 +27,9 @@ class AudioSource {
 
     
     var melodicSound: AKMIDINode?
+    var melodicSoundB: AKMIDINode?
     var oscillator:AKOscillatorBank
+    var oscillatorB:AKOscillatorBank
     var oscillator2:AKOscillator
     var mixer:AKMixer
     var envelope:AKAmplitudeEnvelope
@@ -46,9 +48,10 @@ class AudioSource {
         
         //oscillator = AKOscillatorBank(waveform: AKTable(.sawtooth))
         oscillator = AKOscillatorBank(waveform: AKTable(.sawtooth))
-        oscillator2 = AKOscillator(waveform: AKTable(.square))
+        oscillatorB = AKOscillatorBank(waveform: AKTable(.sawtooth))
+        oscillator2 = AKOscillator(waveform: AKTable(.sine))
         
-        
+        oscillatorB.detuningOffset = 31
 
         oscillator2.amplitude = 0.5
         oscillator2.frequency = 1000
@@ -57,10 +60,13 @@ class AudioSource {
         
 
         
-        melodicSound = AKMIDINode(node: oscillator)
-        melodicSound?.enableMIDI(midi.client, name: "melodicSound midi in")
+        //melodicSound = AKMIDINode(node: oscillator)
+        //melodicSoundB = AKMIDINode(node: oscillatorB)
         
-        mixer = AKMixer(oscillator, oscillator2);
+        //melodicSound?.enableMIDI(midi.client, name: "melodicSound midi in")
+        //melodicSoundB?.enableMIDI(midi.client, name: "melodicSound midi in")
+        
+        mixer = AKMixer(oscillator, oscillatorB);
 
         envelope = AKAmplitudeEnvelope(mixer)
         
@@ -68,18 +74,21 @@ class AudioSource {
         lowPass.cutoffFrequency = 2000
         lowPass.resonance = 10
         filter303 = AKRolandTB303Filter(mixer)
-        filter303.cutoffFrequency = 2000
+        filter303.cutoffFrequency = 1000 //oscillator2.plus(220.ak)
         filter303.resonance = 10
 
         
-        reverb = AKReverb(filter303)
+        reverb = AKReverb(lowPass)
         delay = AKVariableDelay(reverb)
        
         
         AudioKit.output = reverb
         AudioKit.start()
         
-
+        let midi = AKMIDI()
+        midi.createVirtualPorts()
+        midi.openInput("JaySession 1")
+        midi.addListener(self)
     }
     
     func play() {
@@ -114,17 +123,34 @@ class AudioSource {
     }
     
     func setDetuningOsc2(value: Float) {
-        oscillator2.frequency = Double(value * 200 - 100)
+        oscillatorB.detuningOffset = Double(value * 50 - 25)
      }
     
     func setCutoff(value: Float) {
-        filter303.cutoffFrequency = Double(value * 15000)
+        //filter303.cutoffFrequency = Double(value * 15000)
+        lowPass.cutoffFrequency = Double(value * 15000)
     }
     
     func setResonance(value: Float) {
-        filter303.resonance = Double(value * 40)
+        //filter303.resonance = Double(value * 40)
+        lowPass.resonance = Double(value * 40)
     }
 
-    
+    func receivedMIDINoteOn(noteNumber: MIDINoteNumber,
+                            velocity: MIDIVelocity,
+                            channel: Int) {
+        oscillator.play(noteNumber: noteNumber, velocity: velocity)
+        oscillatorB.play(noteNumber: noteNumber, velocity: velocity)
+    }
+    func receivedMIDINoteOff(noteNumber: MIDINoteNumber,
+                             velocity: MIDIVelocity,
+                             channel: Int) {
+        oscillator.stop(noteNumber: noteNumber)
+        oscillatorB.stop(noteNumber: noteNumber)
+    }
+    func receivedMIDIPitchWheel(_ pitchWheelValue: Int, channel: Int) {
+        //let bendSemi =  (Double(pitchWheelValue - 8192) / 8192.0) * midiBendRange
+        //core.globalbend = bendSemi
+    }
     
 }
