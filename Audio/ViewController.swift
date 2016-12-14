@@ -47,6 +47,23 @@ class ViewController: UIViewController {
         audioSource.setRelease(value: sender.value)
     }
     
+    @IBAction func setAttack2(_ sender: UISlider) {
+        audioSource.setAttack2(value: sender.value)
+    }
+    
+    @IBAction func setDecay2(_ sender: UISlider) {
+        audioSource.setDecay2(value: sender.value)
+    }
+    
+    @IBAction func setSustain2(_ sender: UISlider) {
+        audioSource.setSustain2(value: sender.value)
+    }
+    
+    @IBAction func setRelease2(_ sender: UISlider) {
+        audioSource.setRelease2(value: sender.value)
+    }
+    
+    
     @IBAction func changeFreq(_ sender: UISlider) {
         audioSource.setDetuningOsc2(value: sender.value)
     }
@@ -55,5 +72,33 @@ class ViewController: UIViewController {
     @IBAction func setResonance(_ sender: UISlider) {
         audioSource.setResonance(value: sender.value)
     }
+    @IBAction func setVCO1Sine(_ sender: UIButton) {
+        audioSource.setVCO1Waveform(value: "sine")
+    }
+    @IBAction func setVCO1Saq(_ sender: UIButton) {
+        audioSource.setVCO1Waveform(value: "def")
+    }
+    @IBAction func setVCO1Square(_ sender: UIButton) {
+        audioSource.setVCO1Waveform(value: "square")
+    }
+    @IBAction func setVCO1Tri(_ sender: UIButton) {
+        audioSource.setVCO1Waveform(value: "triangle")
+    }
+    
+    @IBAction func setVCO2Sine(_ sender: UIButton) {
+        audioSource.setVCO2Waveform(value: "sine")
+    }
+    @IBAction func setVCO2Saw(_ sender: UIButton) {
+        audioSource.setVCO2Waveform(value: "def")
+    }
+    @IBAction func setVCO2Square(_ sender: UIButton) {
+        audioSource.setVCO2Waveform(value: "square")
+    }
+    @IBAction func setVCO2Tri(_ sender: UIButton) {
+        audioSource.setVCO2Waveform(value: "triangle")
+    }
+    
+    
+    
 }
 

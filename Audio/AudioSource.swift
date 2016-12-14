@@ -15,16 +15,19 @@ class AudioSource: AKMIDIListener {
     
     //let sawtooth = AKTable.sawtooth // .triangle, etc.
 
-    let square = AKTable(.square, size: 16)
+    let square = AKTable(.square)
     
-    let triangle = AKTable(.triangle, size: 4096)
+    let triangle = AKTable(.triangle)
     
-    let sine = AKTable(.sine, size: 4096)
+    let sine = AKTable(.sine)
     
-    let sawtooth = AKTable(.sawtooth, size: 4096)
+    let sawtooth = AKTable(.sawtooth)
     
     var custom = AKTable(.sine, size: 512)
 
+    var vco1:AKMorphingOscillatorBank
+    var vco2:AKMorphingOscillatorBank
+    
     
     var melodicSound: AKMIDINode?
     var melodicSoundB: AKMIDINode?
@@ -58,6 +61,10 @@ class AudioSource: AKMIDIListener {
         oscillator2.detuningOffset = 0
         oscillator2.start()
         
+        vco1 = AKMorphingOscillatorBank(waveformArray: [triangle, square, sine, sawtooth])
+        vco2 = AKMorphingOscillatorBank(waveformArray: [triangle, square, sine, sawtooth])
+        vco1.index = 1.1
+        vco2.index = 1.1
 
         
         //melodicSound = AKMIDINode(node: oscillator)
@@ -66,7 +73,7 @@ class AudioSource: AKMIDIListener {
         //melodicSound?.enableMIDI(midi.client, name: "melodicSound midi in")
         //melodicSoundB?.enableMIDI(midi.client, name: "melodicSound midi in")
         
-        mixer = AKMixer(oscillator, oscillatorB);
+        mixer = AKMixer(vco1, vco2, oscillator);
 
         envelope = AKAmplitudeEnvelope(mixer)
         
@@ -93,60 +100,104 @@ class AudioSource: AKMIDIListener {
     
     func play() {
         if (isPlaying) {
-            oscillator.stop(noteNumber: 48)
+            oscillator.play(noteNumber: 48, velocity: 127)
+            receivedMIDINoteOn(noteNumber: 48, velocity: 127, channel: 0)
             isPlaying = false
         } else {
-            oscillator.play(noteNumber: 48, velocity: 127)
+            receivedMIDINoteOn(noteNumber: 48, velocity: 127, channel: 0)
             isPlaying = true
         }
     
     }
     
     func setAttack(value: Float) {
-        //envelope.attackDuration = Double(value * 3)
-        oscillator.attackDuration = Double(value * 3)
+        vco1.attackDuration = Double(value * 3)
         
     }
     func setDecay(value: Float) {
-        //envelope.decayDuration = Double(value * 3)
-        oscillator.decayDuration = Double(value * 3)
+        vco1.decayDuration = Double(value * 3)
         
     }
     func setSustain(value: Float) {
-        //envelope.sustainLevel = Double(value)
-        oscillator.sustainLevel = Double(value)
+        vco1.sustainLevel = Double(value)
     }
     
     func setRelease(value: Float) {
-        //envelope.releaseDuration = Double(value * 3)
-        oscillator.releaseDuration = Double(value * 3)
+        vco1.releaseDuration = Double(value * 3)
     }
     
+    func setAttack2(value: Float) {
+        vco2.attackDuration = Double(value * 3)
+        
+    }
+    func setDecay2(value: Float) {
+        vco2.decayDuration = Double(value * 3)
+        
+    }
+    func setSustain2(value: Float) {
+        vco2.sustainLevel = Double(value)
+    }
+    
+    func setRelease2(value: Float) {
+        vco2.releaseDuration = Double(value * 3)
+    }
+
+    
+    
     func setDetuningOsc2(value: Float) {
-        oscillatorB.detuningOffset = Double(value * 50 - 25)
+        vco2.detuningOffset = Double(value * 50 - 25)
      }
     
     func setCutoff(value: Float) {
-        //filter303.cutoffFrequency = Double(value * 15000)
         lowPass.cutoffFrequency = Double(value * 15000)
     }
     
     func setResonance(value: Float) {
-        //filter303.resonance = Double(value * 40)
         lowPass.resonance = Double(value * 40)
     }
 
+    func setVCO1Waveform(value: String) {
+        switch value {
+            case "sine":
+                vco1.index = 2
+            case "triangle":
+                vco1.index = 0
+            case "square":
+                vco1.index = 1
+            default:
+                vco1.index = 3
+        }
+    }
+    
+    func setVCO2Waveform(value: String) {
+        switch value {
+        case "sine":
+            vco2.index = 2
+        case "triangle":
+            vco2.index = 0
+        case "square":
+            vco2.index = 1
+        default:
+            vco2.index = 3
+        }
+
+    }
+    
+    
+    
     func receivedMIDINoteOn(noteNumber: MIDINoteNumber,
                             velocity: MIDIVelocity,
                             channel: Int) {
-        oscillator.play(noteNumber: noteNumber, velocity: velocity)
-        oscillatorB.play(noteNumber: noteNumber, velocity: velocity)
+        //oscillator.play(noteNumber: noteNumber, velocity: velocity)
+        vco1.play(noteNumber: noteNumber, velocity: velocity)
+        vco2.play(noteNumber: noteNumber, velocity: velocity)
     }
     func receivedMIDINoteOff(noteNumber: MIDINoteNumber,
                              velocity: MIDIVelocity,
                              channel: Int) {
-        oscillator.stop(noteNumber: noteNumber)
-        oscillatorB.stop(noteNumber: noteNumber)
+        //oscillator.stop(noteNumber: noteNumber)
+        vco1.stop(noteNumber: noteNumber)
+        vco2.stop(noteNumber: noteNumber)
     }
     func receivedMIDIPitchWheel(_ pitchWheelValue: Int, channel: Int) {
         //let bendSemi =  (Double(pitchWheelValue - 8192) / 8192.0) * midiBendRange
