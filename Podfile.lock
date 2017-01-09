@@ -1,0 +1,12 @@
+PODS:
+  - Audiobus (2.3.1)
+
+DEPENDENCIES:
+  - Audiobus
+
+SPEC CHECKSUMS:
+  Audiobus: d75ef3f0d625abf3007a147548423e76ca61043d
+
+PODFILE CHECKSUM: ba177219aa3b6c3dba6fb4a9c9dc4c6ded87ebea
+
+COCOAPODS: 1.1.1

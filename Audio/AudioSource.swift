@@ -9,12 +9,10 @@
 import Foundation
 import AudioKit
 
-class AudioSource: AKMIDIListener {
+class AudioSource: AKMIDIListener, AKKeyboardDelegate {
     
     let midi = AKMIDI()
     
-    //let sawtooth = AKTable.sawtooth // .triangle, etc.
-
     let square = AKTable(.square)
     
     let triangle = AKTable(.triangle)
@@ -23,8 +21,6 @@ class AudioSource: AKMIDIListener {
     
     let sawtooth = AKTable(.sawtooth)
     
-    var custom = AKTable(.sine, size: 512)
-
     var vco1:AKMorphingOscillatorBank
     var vco2:AKMorphingOscillatorBank
     
@@ -91,6 +87,7 @@ class AudioSource: AKMIDIListener {
         
         AudioKit.output = reverb
         AudioKit.start()
+        Audiobus.start()
         
         let midi = AKMIDI()
         midi.createVirtualPorts()
@@ -100,8 +97,8 @@ class AudioSource: AKMIDIListener {
     
     func play() {
         if (isPlaying) {
-            oscillator.play(noteNumber: 48, velocity: 127)
-            receivedMIDINoteOn(noteNumber: 48, velocity: 127, channel: 0)
+            //oscillator.play(noteNumber: 48, velocity: 127)
+            receivedMIDINoteOff(noteNumber: 48, velocity: 127, channel: 0)
             isPlaying = false
         } else {
             receivedMIDINoteOn(noteNumber: 48, velocity: 127, channel: 0)
@@ -192,6 +189,7 @@ class AudioSource: AKMIDIListener {
         vco1.play(noteNumber: noteNumber, velocity: velocity)
         vco2.play(noteNumber: noteNumber, velocity: velocity)
     }
+    
     func receivedMIDINoteOff(noteNumber: MIDINoteNumber,
                              velocity: MIDIVelocity,
                              channel: Int) {
@@ -199,9 +197,33 @@ class AudioSource: AKMIDIListener {
         vco1.stop(noteNumber: noteNumber)
         vco2.stop(noteNumber: noteNumber)
     }
+    
     func receivedMIDIPitchWheel(_ pitchWheelValue: Int, channel: Int) {
         //let bendSemi =  (Double(pitchWheelValue - 8192) / 8192.0) * midiBendRange
         //core.globalbend = bendSemi
     }
     
+    func receivedMIDIController(_ controller: Int, value: Int, channel: MIDIChannel) {
+        var result: Float = Float(value) / Float(127)
+        //debugPrint(value)
+        //debugPrint(result)
+        switch controller {
+        case 1:
+            setCutoff(value: result)
+            
+        case 71:
+            setResonance(value: result)
+            
+        default:
+            setCutoff(value: result)
+        }
+    }
+    
+    func noteOn(note: MIDINoteNumber) {
+        receivedMIDINoteOn(noteNumber: note, velocity: 127, channel: 0)
+    }
+    
+    func noteOff(note: MIDINoteNumber) {
+        receivedMIDINoteOff(noteNumber: note, velocity: 127, channel: 0)
+    }
 }

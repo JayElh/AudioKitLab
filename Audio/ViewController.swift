@@ -13,19 +13,50 @@ import AudioKit
 
 class ViewController: UIViewController {
 
-    var isPlaying = false
     let audioSource = AudioSource()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        setupUI()
 
-        isPlaying = true
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    func setupUI() {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.distribution = .fillEqually
+        stackView.alignment = .fill
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        //let adsrView = AKADSRView() { att, dec, sus, rel in
+        //    self.oscillator.attackDuration = att
+        //    self.oscillator.decayDuration = dec
+        //    self.oscillator.sustainLevel = sus
+        //    self.oscillator.releaseDuration = rel
+        //}
+        
+        //stackView.addArrangedSubview(adsrView)
+        let keyboardView = AKKeyboardView()
+        keyboardView.delegate = audioSource
+        
+        stackView.addArrangedSubview(keyboardView)
+        
+        view.addSubview(stackView)
+        
+        //stackView.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
+        //stackView.heightAnchor.constraint(equalToConstant: view.frame.height).isActive = true
+        
+        //stackView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        stackView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
+    }
+
+    @IBOutlet weak var test: UIView!
 
     @IBAction func button(_ sender: UIButton) {
         audioSource.play()
