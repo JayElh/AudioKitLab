@@ -24,16 +24,24 @@ class AudioSource: AKMIDIListener, AKKeyboardDelegate {
     var vco1:AKMorphingOscillatorBank
     var vco2:AKMorphingOscillatorBank
     
+    var vco1Offset: Int = 0
+    var vco2Offset: Int = 0
+    
     
     var melodicSound: AKMIDINode?
     var melodicSoundB: AKMIDINode?
-    var oscillator:AKOscillatorBank
+    var oscillatorA:AKOscillatorBank
     var oscillatorB:AKOscillatorBank
     var oscillator2:AKOscillator
     var mixer:AKMixer
     var envelope:AKAmplitudeEnvelope
-    var lowPass:AKLowPassFilter
-    var filter303:AKRolandTB303Filter
+    //var lowPass:AKLowPassFilter
+    //var filter303:AKRolandTB303Filter
+    
+    var filterSection: FilterSection
+    var testEffects: TestEffects
+    
+    
     var delay:AKVariableDelay
     var reverb:AKReverb
     
@@ -46,14 +54,14 @@ class AudioSource: AKMIDIListener, AKKeyboardDelegate {
         AKSettings.playbackWhileMuted = true
         
         //oscillator = AKOscillatorBank(waveform: AKTable(.sawtooth))
-        oscillator = AKOscillatorBank(waveform: AKTable(.sawtooth))
+        oscillatorA = AKOscillatorBank(waveform: AKTable(.sawtooth))
         oscillatorB = AKOscillatorBank(waveform: AKTable(.sawtooth))
         oscillator2 = AKOscillator(waveform: AKTable(.sine))
-        
+
         oscillatorB.detuningOffset = 31
 
-        oscillator2.amplitude = 0.5
-        oscillator2.frequency = 1000
+        oscillator2.amplitude = 2.5
+        oscillator2.frequency = 10
         oscillator2.detuningOffset = 0
         oscillator2.start()
         
@@ -62,32 +70,39 @@ class AudioSource: AKMIDIListener, AKKeyboardDelegate {
         vco1.index = 1.1
         vco2.index = 1.1
 
+        //vco1Offset = 0
+        //vco2Offset = 0
         
-        //melodicSound = AKMIDINode(node: oscillator)
+        //vco1.detuningOffset = oscillator2.
+        
+        //melodicSound = AKMIDINode(node: oscillatorA)
         //melodicSoundB = AKMIDINode(node: oscillatorB)
         
         //melodicSound?.enableMIDI(midi.client, name: "melodicSound midi in")
         //melodicSoundB?.enableMIDI(midi.client, name: "melodicSound midi in")
         
-        mixer = AKMixer(vco1, vco2, oscillator);
+        mixer = AKMixer(vco1, vco2, oscillatorA);
+        
+        //AKAm
 
         envelope = AKAmplitudeEnvelope(mixer)
         
-        lowPass = AKLowPassFilter(mixer)
-        lowPass.cutoffFrequency = 2000
-        lowPass.resonance = 10
-        filter303 = AKRolandTB303Filter(mixer)
-        filter303.cutoffFrequency = 1000 //oscillator2.plus(220.ak)
-        filter303.resonance = 10
+        
+        filterSection = FilterSection(mixer)
+        filterSection.output.start()
+        //filterSection.lfoAmplitude(1000.0)
+        
+        testEffects = TestEffects(filterSection)
+        testEffects.output.start()
 
         
-        reverb = AKReverb(lowPass)
+        reverb = AKReverb(testEffects)
         delay = AKVariableDelay(reverb)
        
         
         AudioKit.output = reverb
         AudioKit.start()
-        Audiobus.start()
+        //Audiobus.start()
         
         let midi = AKMIDI()
         midi.createVirtualPorts()
@@ -142,15 +157,15 @@ class AudioSource: AKMIDIListener, AKKeyboardDelegate {
     
     
     func setDetuningOsc2(value: Float) {
-        vco2.detuningOffset = Double(value * 50 - 25)
+        vco2.detuningOffset = Double(value * 500 - 250)
      }
     
     func setCutoff(value: Float) {
-        lowPass.cutoffFrequency = Double(value * 15000)
+        filterSection.cutoffFrequency = Double(value * 15000)
     }
     
     func setResonance(value: Float) {
-        lowPass.resonance = Double(value * 40)
+        filterSection.resonance = Double(value)
     }
 
     func setVCO1Waveform(value: String) {
@@ -186,16 +201,16 @@ class AudioSource: AKMIDIListener, AKKeyboardDelegate {
                             velocity: MIDIVelocity,
                             channel: Int) {
         //oscillator.play(noteNumber: noteNumber, velocity: velocity)
-        vco1.play(noteNumber: noteNumber, velocity: velocity)
-        vco2.play(noteNumber: noteNumber, velocity: velocity)
+        vco1.play(noteNumber: noteNumber + vco1Offset, velocity: velocity)
+        vco2.play(noteNumber: noteNumber + vco2Offset, velocity: velocity)
     }
     
     func receivedMIDINoteOff(noteNumber: MIDINoteNumber,
                              velocity: MIDIVelocity,
                              channel: Int) {
         //oscillator.stop(noteNumber: noteNumber)
-        vco1.stop(noteNumber: noteNumber)
-        vco2.stop(noteNumber: noteNumber)
+        vco1.stop(noteNumber: noteNumber + vco1Offset)
+        vco2.stop(noteNumber: noteNumber + vco2Offset)
     }
     
     func receivedMIDIPitchWheel(_ pitchWheelValue: Int, channel: Int) {
@@ -204,7 +219,7 @@ class AudioSource: AKMIDIListener, AKKeyboardDelegate {
     }
     
     func receivedMIDIController(_ controller: Int, value: Int, channel: MIDIChannel) {
-        var result: Float = Float(value) / Float(127)
+        let result: Float = Float(value) / Float(127)
         //debugPrint(value)
         //debugPrint(result)
         switch controller {

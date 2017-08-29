@@ -8,11 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		00DE00ECC57DBDE87F64B2C4 /* Pods_Audio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FD27EC2A08CD1B51AE1C1E4 /* Pods_Audio.framework */; };
+		0406C3431F5432B2004F5772 /* FilterSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0406C3421F5432B2004F5772 /* FilterSection.swift */; };
+		0406C3451F545DDB004F5772 /* TestEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0406C3441F545DDB004F5772 /* TestEffects.swift */; };
 		0473862E1E238D4700DE677D /* AudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0473862D1E238D4700DE677D /* AudioKit.framework */; };
 		0473862F1E238D4700DE677D /* AudioKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0473862D1E238D4700DE677D /* AudioKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		047386311E23A47200DE677D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85027C101DFF37AF00CF65C6 /* AudioToolbox.framework */; };
-		047386341E23B6C900DE677D /* Audiobus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047386331E23B6C900DE677D /* Audiobus.swift */; };
-		047386361E23BEB600DE677D /* Audiobus.txt in Resources */ = {isa = PBXBuildFile; fileRef = 047386351E23BEB600DE677D /* Audiobus.txt */; };
 		809361541A69DDDC3C190C7F /* Pods_AudioTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA36E61FCA65685B6451E0A9 /* Pods_AudioTests.framework */; };
 		850AE99F1DD845F800620CCC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 850AE99E1DD845F800620CCC /* AppDelegate.swift */; };
 		850AE9A11DD845F800620CCC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 850AE9A01DD845F800620CCC /* ViewController.swift */; };
@@ -59,14 +59,13 @@
 
 /* Begin PBXFileReference section */
 		02609A71E1A8AC3838674641 /* Pods-AudioTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AudioTests/Pods-AudioTests.debug.xcconfig"; sourceTree = "<group>"; };
+		0406C3421F5432B2004F5772 /* FilterSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterSection.swift; sourceTree = "<group>"; };
+		0406C3441F545DDB004F5772 /* TestEffects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestEffects.swift; sourceTree = "<group>"; };
 		0473861D1E23858D00DE677D /* AudioKit-iOS */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "AudioKit-iOS"; path = "../../AudioKit-iOS"; sourceTree = "<group>"; };
 		0473861E1E2385C400DE677D /* AudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioKit.framework; path = "../../AudioKit-iOS/AudioKit.framework"; sourceTree = "<group>"; };
 		047386221E2388D400DE677D /* AudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioKit.framework; path = "../../AudioKit-iOS/AudioKit.framework"; sourceTree = "<group>"; };
 		047386261E238AE800DE677D /* AudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioKit.framework; path = "../../AudioKit-iOS/AudioKit.framework"; sourceTree = "<group>"; };
 		0473862D1E238D4700DE677D /* AudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AudioKit.framework; sourceTree = "<group>"; };
-		047386321E23B5DD00DE677D /* Audio-BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Audio-BridgingHeader.h"; sourceTree = "<group>"; };
-		047386331E23B6C900DE677D /* Audiobus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Audiobus.swift; sourceTree = "<group>"; };
-		047386351E23BEB600DE677D /* Audiobus.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Audiobus.txt; sourceTree = "<group>"; };
 		11A29E2C9C278B396FB98D43 /* Pods-AudioTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AudioTests/Pods-AudioTests.release.xcconfig"; sourceTree = "<group>"; };
 		2FFB526D9DC4C9577B1D57F9 /* Pods-AudioUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AudioUITests/Pods-AudioUITests.release.xcconfig"; sourceTree = "<group>"; };
 		85027C0E1DFF37AF00CF65C6 /* Audio.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Audio.entitlements; sourceTree = "<group>"; };
@@ -174,9 +173,8 @@
 				850AE9AD1DD845F800620CCC /* Info.plist */,
 				850AE9A51DD845F800620CCC /* Audio.xcdatamodeld */,
 				8545842E1DFEBD0B00336362 /* AudioSource.swift */,
-				047386321E23B5DD00DE677D /* Audio-BridgingHeader.h */,
-				047386331E23B6C900DE677D /* Audiobus.swift */,
-				047386351E23BEB600DE677D /* Audiobus.txt */,
+				0406C3421F5432B2004F5772 /* FilterSection.swift */,
+				0406C3441F545DDB004F5772 /* TestEffects.swift */,
 			);
 			path = Audio;
 			sourceTree = "<group>";
@@ -340,7 +338,6 @@
 			files = (
 				850AE9AC1DD845F800620CCC /* LaunchScreen.storyboard in Resources */,
 				850AE9A91DD845F800620CCC /* Assets.xcassets in Resources */,
-				047386361E23BEB600DE677D /* Audiobus.txt in Resources */,
 				850AE9A41DD845F800620CCC /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -504,9 +501,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				047386341E23B6C900DE677D /* Audiobus.swift in Sources */,
 				850AE9A71DD845F800620CCC /* Audio.xcdatamodeld in Sources */,
 				8545842F1DFEBD0B00336362 /* AudioSource.swift in Sources */,
+				0406C3451F545DDB004F5772 /* TestEffects.swift in Sources */,
+				0406C3431F5432B2004F5772 /* FilterSection.swift in Sources */,
 				850AE9A11DD845F800620CCC /* ViewController.swift in Sources */,
 				850AE99F1DD845F800620CCC /* AppDelegate.swift in Sources */,
 			);

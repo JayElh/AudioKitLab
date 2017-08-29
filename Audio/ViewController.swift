@@ -62,6 +62,14 @@ class ViewController: UIViewController {
         audioSource.play()
     }
     
+    @IBAction func setVco1Offset(_ sender: UISlider) {
+        audioSource.vco1Offset = Int(sender.value)
+    }
+    
+    @IBAction func setVco2Offset(_ sender: UISlider) {
+        audioSource.vco2Offset = Int(sender.value)
+    }
+    
     @IBAction func setAttack(_ sender: UISlider) {
         audioSource.setAttack(value: sender.value)
     }
@@ -98,11 +106,38 @@ class ViewController: UIViewController {
     @IBAction func changeFreq(_ sender: UISlider) {
         audioSource.setDetuningOsc2(value: sender.value)
     }
-    @IBAction func setCutoff(_ sender: UISlider) {
-        audioSource.setCutoff(value: sender.value)   }
+    
+    @IBAction func setCutoffFreq(_ sender: UISlider) {
+        audioSource.filterSection.cutoffFrequency = (value: sender.value * 1000)
+    }
+    
     @IBAction func setResonance(_ sender: UISlider) {
         audioSource.setResonance(value: sender.value)
     }
+    
+    @IBAction func setLFORate(_ sender: UISlider) {
+        audioSource.filterSection.lfoRate = Double(sender.value * 10)
+
+    }
+    
+    @IBAction func setLFOAmp(_ sender: UISlider) {
+        audioSource.filterSection.lfoAmplitude = Double(sender.value * 1000)
+    }
+    
+    @IBAction func setLfoSine(_ sender: UIButton) {
+        audioSource.filterSection.lfoIndex = 0;
+    }
+    @IBAction func setLfoSaw(_ sender: UIButton) {
+        audioSource.filterSection.lfoIndex = 1;
+    }
+    @IBAction func setLfoSquare(_ sender: Any) {
+        audioSource.filterSection.lfoIndex = 2;
+    }
+    @IBAction func setLfoTriangle(_ sender: Any) {
+        audioSource.filterSection.lfoIndex = 3;
+    }
+    
+    
     @IBAction func setVCO1Sine(_ sender: UIButton) {
         audioSource.setVCO1Waveform(value: "sine")
     }
@@ -129,7 +164,10 @@ class ViewController: UIViewController {
         audioSource.setVCO2Waveform(value: "triangle")
     }
     
+    @IBAction func setOscAmp(_ sender: UISlider) {
+    }
     
+      
     
 }
 
